@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>HookMaster AI</title>
-    
     <script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
   </head>
   <body>
@@ -17,22 +16,10 @@
     <script type="module" src="/src/main.tsx"></script>
 
     <script type="text/javascript">
-      Paddle.Initialize({ 
-        token: 'test_ff3edbec8a17a314dedc2b56085' 
-      });
-
       function payNow() {
-        Paddle.Checkout.open({
-          settings: {
-            displayMode: "overlay",
-            theme: "dark"
-          },
-          items: [{
-            priceId: 'pri_01kmwsxhmnefqzw2e6t8hrzzhd', 
-            quantity: 1
-          }]
-        });
+        window.open("https://sandbox-checkout.paddle.com/checkout/custom/pri_01kmwsxhmnefqzw2e6t8hrzzhd", "_blank");
       }
     </script>
   </body>
 </html>
+
