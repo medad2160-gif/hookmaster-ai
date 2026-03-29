@@ -3,84 +3,140 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>HookMaster AI</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap" rel="stylesheet">
-    
+    <title>HookMaster AI | Exclusive Access</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-      /* Step 2: Global Styles and Reset */
-      html, body {
+      :root {
+        --neon-green: #0dff1a;
+        --dark-bg: #050505;
+        --card-bg: #111;
+      }
+
+      body {
         margin: 0;
         padding: 0;
-        height: 100%;
-        background-color: #000; /* Matching the dark green/black background in your design */
+        background-color: var(--dark-bg);
+        color: #fff;
         font-family: 'Poppins', sans-serif;
-      }
-
-      #root {
-        height: 100%;
-      }
-
-      /* Step 3: Professional CTA Button Style based on your image */
-      .hookmaster-cta-button {
-        position: fixed;
-        bottom: 24px; /* Placed at the bottom for mobile-first feel, like your image */
-        left: 50%;
-        transform: translateX(-50%);
-        width: calc(100% - 48px); /* Responsive width */
-        max-width: 420px; /* Max width for desktop */
-        padding: 18px 24px;
-        background-color: #0dff1a; /* The vibrant neon green from your image */
-        color: #fff; /* White text on green for contrast */
-        border-radius: 14px; /* Matches the curve in your image */
-        text-decoration: none;
-        font-size: 20px;
-        font-weight: 700;
-        z-index: 9999;
-        text-align: center;
         display: flex;
-        flex-direction: column; /* To stack the text and price */
+        flex-direction: column;
         align-items: center;
-        justify-content: center;
-        line-height: 1.3;
-        transition: all 0.2s ease-in-out;
-        border: none;
-        cursor: pointer;
-        /* Step 4: The professional glowing shadow from your image */
-        box-shadow: 0 4px 18px rgba(13, 255, 26, 0.6); 
+        text-align: center;
       }
 
-      /* Formatting the secondary text (Price) like the image */
-      .hookmaster-cta-button span.price {
-        font-size: 16px;
+      .container {
+        width: 100%;
+        max-width: 500px;
+        padding: 40px 20px;
+        box-sizing: border-box;
+      }
+
+      .badge {
+        background: rgba(13, 255, 26, 0.1);
+        color: var(--neon-green);
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 12px;
         font-weight: 600;
-        opacity: 0.8;
-        margin-top: 2px;
+        margin-bottom: 20px;
+        display: inline-block;
+        border: 1px solid var(--neon-green);
       }
 
-      /* Step 5: Professional interaction effects */
-      .hookmaster-cta-button:hover {
-        background-color: #0bda17;
-        box-shadow: 0 6px 24px rgba(13, 255, 26, 0.8);
-        transform: translateX(-50%) translateY(-2px);
+      h1 {
+        font-size: 32px;
+        margin-bottom: 10px;
+        background: linear-gradient(to bottom, #fff, #888);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
       }
 
-      .hookmaster-cta-button:active {
-        transform: translateX(-50%) translateY(1px);
-        box-shadow: 0 3px 12px rgba(13, 255, 26, 0.5);
+      .price-card {
+        background: var(--card-bg);
+        border: 1px solid #222;
+        border-radius: 24px;
+        padding: 30px;
+        margin-top: 30px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .price-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 4px;
+        background: var(--neon-green);
+      }
+
+      .price-tag {
+        font-size: 48px;
+        font-weight: 700;
+        color: var(--neon-green);
+        margin: 20px 0;
+      }
+
+      .features-list {
+        text-align: left;
+        margin: 30px 0;
+        list-style: none;
+        padding: 0;
+      }
+
+      .features-list li {
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        color: #ccc;
+      }
+
+      .features-list li::before {
+        content: '✓';
+        color: var(--neon-green);
+        margin-right: 10px;
+        font-weight: bold;
+      }
+
+      .cta-button {
+        display: block;
+        background: var(--neon-green);
+        color: #000;
+        text-decoration: none;
+        padding: 20px;
+        border-radius: 16px;
+        font-weight: 700;
+        font-size: 18px;
+        box-shadow: 0 10px 20px rgba(13, 255, 26, 0.3);
+        transition: 0.3s;
+      }
+
+      .cta-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 30px rgba(13, 255, 26, 0.5);
       }
     </style>
   </head>
   <body>
-    <div id="root"></div>
 
-    <a href="https://sandbox-checkout.paddle.com/checkout/custom/pri_01kmwsxhmnefqzw2e6t8hrzzhd" 
-       class="hookmaster-cta-button"
-       target="_blank">
-       Get HookMaster PRO
-       <span class="price">at $74.99 💸</span>
-    </a>
+    <div class="container">
+      <div class="badge">LIMITED TIME OFFER</div>
+      <h1>Get Full Access Now</h1>
+      <p style="color: #888;">Join 100+ professional creators using HookMaster AI</p>
 
-    <script type="module" src="/src/main.tsx"></script>
+      <div class="price-card">
+        <div style="font-weight: 600;">PRO PLAN</div>
+        <div class="price-tag">$74.99</div>
+        <ul class="features-list">
+          <li>9+ Professional Modules</li>
+          <li>12+ Hours of Content</li>
+          <li>Lifetime Access & Updates</li>
+          <li>Exclusive AI Tools Support</li>
+        </ul>
+        <a href="https://sandbox-checkout.paddle.com/checkout/custom/pri_01kmwsxhmnefqzw2e6t8hrzzhd" class="cta-button">
+          Subscribe Now 🚀
+        </a>
+      </div>
+    </div>
+
   </body>
 </html>
