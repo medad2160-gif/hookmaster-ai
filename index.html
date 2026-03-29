@@ -6,6 +6,7 @@
     <title>HookMaster AI | Exclusive Access</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
+      /* Step 1: Global Styles and the Glowing Background Effect */
       :root {
         --neon-green: #0dff1a;
         --dark-bg: #050505;
@@ -22,8 +23,44 @@
         justify-content: center;
         align-items: center;
         min-height: 100vh;
+        overflow: hidden; /* Prevent scrollbars from the background animation */
+        position: relative;
       }
 
+      /* Moving, Glowing Circles in the Background */
+      body::before, body::after {
+        content: '';
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px); /* The "glow" effect */
+        z-index: -1; /* Place behind everything */
+        opacity: 0.15; /* Subtler glow */
+        animation: drift 15s infinite alternate ease-in-out;
+      }
+
+      body::before {
+        width: 300px;
+        height: 300px;
+        background-color: var(--neon-green);
+        top: 10%;
+        left: 10%;
+      }
+
+      body::after {
+        width: 250px;
+        height: 250px;
+        background-color: #0d831a; /* Darker green circle */
+        bottom: 10%;
+        right: 10%;
+        animation-delay: -5s; /* Offset the animation */
+      }
+
+      @keyframes drift {
+        0% { transform: translate(0, 0); }
+        100% { transform: translate(50px, 50px) scale(1.1); }
+      }
+
+      /* Step 2: The Main Container for Centering */
       .container {
         width: 100%;
         max-width: 450px;
@@ -31,16 +68,42 @@
         box-sizing: border-box;
       }
 
+      /* Step 3: The Price Card with Motion Effects */
       .price-card {
         background: var(--card-bg);
         border: 1px solid #222;
         border-radius: 28px;
         padding: 40px 30px;
         text-align: center;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         position: relative;
+        overflow: hidden;
+        /* Start-up animation for the card */
+        animation: slideUpFade 0.8s ease-out forwards;
+        opacity: 0;
       }
 
+      @keyframes slideUpFade {
+        0% { transform: translateY(30px); opacity: 0; }
+        100% { transform: translateY(0); opacity: 1; }
+      }
+
+      /* Subtle gradient border effect on hover */
+      .price-card::before {
+        content: '';
+        position: absolute;
+        inset: -2px;
+        border-radius: inherit;
+        background: linear-gradient(45deg, transparent, transparent 40%, var(--neon-green), transparent 60%, transparent);
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+      }
+
+      .price-card:hover::before {
+        opacity: 0.2;
+      }
+
+      /* Other card elements remain the same style */
       .badge {
         background: rgba(13, 255, 26, 0.1);
         color: var(--neon-green);
@@ -98,6 +161,7 @@
         font-weight: 900;
       }
 
+      /* The CTA Button with enhanced glow and hover interaction */
       .cta-button {
         display: block;
         background: var(--neon-green);
@@ -108,12 +172,20 @@
         font-weight: 700;
         font-size: 18px;
         box-shadow: 0 10px 25px rgba(13, 255, 26, 0.4);
-        transition: transform 0.2s, box-shadow 0.2s;
+        transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+        border: none;
+        cursor: pointer;
       }
 
       .cta-button:hover {
+        background-color: #0bda17;
         transform: translateY(-3px);
-        box-shadow: 0 15px 35px rgba(13, 255, 26, 0.6);
+        box-shadow: 0 15px 35px rgba(13, 255, 26, 0.7);
+      }
+
+      .cta-button:active {
+        transform: translateY(1px);
+        box-shadow: 0 5px 15px rgba(13, 255, 26, 0.3);
       }
     </style>
   </head>
