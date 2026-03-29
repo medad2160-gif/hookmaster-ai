@@ -19,82 +19,83 @@
         color: #fff;
         font-family: 'Poppins', sans-serif;
         display: flex;
-        flex-direction: column;
+        justify-content: center;
         align-items: center;
-        text-align: center;
+        min-height: 100vh;
       }
 
       .container {
         width: 100%;
-        max-width: 500px;
-        padding: 40px 20px;
+        max-width: 450px;
+        padding: 20px;
         box-sizing: border-box;
-      }
-
-      .badge {
-        background: rgba(13, 255, 26, 0.1);
-        color: var(--neon-green);
-        padding: 8px 16px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 600;
-        margin-bottom: 20px;
-        display: inline-block;
-        border: 1px solid var(--neon-green);
-      }
-
-      h1 {
-        font-size: 32px;
-        margin-bottom: 10px;
-        background: linear-gradient(to bottom, #fff, #888);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
       }
 
       .price-card {
         background: var(--card-bg);
         border: 1px solid #222;
-        border-radius: 24px;
-        padding: 30px;
-        margin-top: 30px;
+        border-radius: 28px;
+        padding: 40px 30px;
+        text-align: center;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         position: relative;
-        overflow: hidden;
       }
 
-      .price-card::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 0; width: 100%; height: 4px;
-        background: var(--neon-green);
+      .badge {
+        background: rgba(13, 255, 26, 0.1);
+        color: var(--neon-green);
+        padding: 6px 14px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border: 1px solid var(--neon-green);
+        margin-bottom: 20px;
+        display: inline-block;
+      }
+
+      h1 {
+        font-size: 28px;
+        margin: 10px 0;
+        font-weight: 700;
       }
 
       .price-tag {
-        font-size: 48px;
+        font-size: 56px;
         font-weight: 700;
         color: var(--neon-green);
-        margin: 20px 0;
+        margin: 25px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .price-tag span {
+        font-size: 24px;
+        margin-right: 5px;
       }
 
       .features-list {
         text-align: left;
         margin: 30px 0;
-        list-style: none;
         padding: 0;
+        list-style: none;
       }
 
       .features-list li {
         margin-bottom: 15px;
+        font-size: 14px;
+        color: #aaa;
         display: flex;
         align-items: center;
-        font-size: 14px;
-        color: #ccc;
       }
 
       .features-list li::before {
         content: '✓';
         color: var(--neon-green);
-        margin-right: 10px;
-        font-weight: bold;
+        margin-right: 12px;
+        font-weight: 900;
       }
 
       .cta-button {
@@ -103,37 +104,38 @@
         color: #000;
         text-decoration: none;
         padding: 20px;
-        border-radius: 16px;
+        border-radius: 18px;
         font-weight: 700;
         font-size: 18px;
-        box-shadow: 0 10px 20px rgba(13, 255, 26, 0.3);
-        transition: 0.3s;
+        box-shadow: 0 10px 25px rgba(13, 255, 26, 0.4);
+        transition: transform 0.2s, box-shadow 0.2s;
       }
 
       .cta-button:hover {
         transform: translateY(-3px);
-        box-shadow: 0 15px 30px rgba(13, 255, 26, 0.5);
+        box-shadow: 0 15px 35px rgba(13, 255, 26, 0.6);
       }
     </style>
   </head>
   <body>
 
     <div class="container">
-      <div class="badge">LIMITED TIME OFFER</div>
-      <h1>Get Full Access Now</h1>
-      <p style="color: #888;">Join 100+ professional creators using HookMaster AI</p>
-
       <div class="price-card">
-        <div style="font-weight: 600;">PRO PLAN</div>
-        <div class="price-tag">$74.99</div>
+        <div class="badge">Special Launch Offer</div>
+        <h1>HookMaster PRO</h1>
+        <p style="color: #666; font-size: 14px;">One-time payment for lifetime access</p>
+        
+        <div class="price-tag"><span>$</span>29</div>
+
         <ul class="features-list">
-          <li>9+ Professional Modules</li>
-          <li>12+ Hours of Content</li>
-          <li>Lifetime Access & Updates</li>
-          <li>Exclusive AI Tools Support</li>
+          <li>Full AI Hook Generator Access</li>
+          <li>Viral Video Frameworks</li>
+          <li>Unlimited Content Modules</li>
+          <li>24/7 Priority Support</li>
         </ul>
+
         <a href="https://sandbox-checkout.paddle.com/checkout/custom/pri_01kmwsxhmnefqzw2e6t8hrzzhd" class="cta-button">
-          Subscribe Now 🚀
+          Get Started Now ⚡
         </a>
       </div>
     </div>
