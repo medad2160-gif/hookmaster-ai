@@ -3,14 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>HookMaster AI | Exclusive Access</title>
+    <title>HookMaster AI | Professional Access</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-      /* Step 1: Global Styles and the Glowing Background Effect */
       :root {
         --neon-green: #0dff1a;
         --dark-bg: #050505;
-        --card-bg: #111;
+        --card-bg: #0f0f0f;
       }
 
       body {
@@ -23,132 +22,81 @@
         justify-content: center;
         align-items: center;
         min-height: 100vh;
-        overflow: hidden; /* Prevent scrollbars from the background animation */
+        overflow: hidden;
         position: relative;
       }
 
-      /* Moving, Glowing Circles in the Background */
-      body::before, body::after {
+      /* Glowing Animated Background */
+      body::before {
         content: '';
         position: absolute;
+        width: 400px;
+        height: 400px;
+        background: var(--neon-green);
+        filter: blur(130px);
+        opacity: 0.12;
         border-radius: 50%;
-        filter: blur(80px); /* The "glow" effect */
-        z-index: -1; /* Place behind everything */
-        opacity: 0.15; /* Subtler glow */
-        animation: drift 15s infinite alternate ease-in-out;
+        animation: moveGlow 12s infinite alternate ease-in-out;
+        z-index: -1;
       }
 
-      body::before {
-        width: 300px;
-        height: 300px;
-        background-color: var(--neon-green);
-        top: 10%;
-        left: 10%;
+      @keyframes moveGlow {
+        from { transform: translate(-30%, -30%); }
+        to { transform: translate(30%, 30%); }
       }
 
-      body::after {
-        width: 250px;
-        height: 250px;
-        background-color: #0d831a; /* Darker green circle */
-        bottom: 10%;
-        right: 10%;
-        animation-delay: -5s; /* Offset the animation */
-      }
-
-      @keyframes drift {
-        0% { transform: translate(0, 0); }
-        100% { transform: translate(50px, 50px) scale(1.1); }
-      }
-
-      /* Step 2: The Main Container for Centering */
-      .container {
-        width: 100%;
-        max-width: 450px;
-        padding: 20px;
-        box-sizing: border-box;
-      }
-
-      /* Step 3: The Price Card with Motion Effects */
       .price-card {
         background: var(--card-bg);
         border: 1px solid #222;
-        border-radius: 28px;
-        padding: 40px 30px;
+        border-radius: 32px;
+        padding: 45px 35px;
         text-align: center;
+        max-width: 400px;
+        width: 85%;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.7);
+        animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
         position: relative;
-        overflow: hidden;
-        /* Start-up animation for the card */
-        animation: slideUpFade 0.8s ease-out forwards;
-        opacity: 0;
       }
 
-      @keyframes slideUpFade {
-        0% { transform: translateY(30px); opacity: 0; }
-        100% { transform: translateY(0); opacity: 1; }
+      @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(40px); }
+        to { opacity: 1; transform: translateY(0); }
       }
 
-      /* Subtle gradient border effect on hover */
-      .price-card::before {
-        content: '';
-        position: absolute;
-        inset: -2px;
-        border-radius: inherit;
-        background: linear-gradient(45deg, transparent, transparent 40%, var(--neon-green), transparent 60%, transparent);
-        z-index: -1;
-        opacity: 0;
-        transition: opacity 0.5s ease;
-      }
-
-      .price-card:hover::before {
-        opacity: 0.2;
-      }
-
-      /* Other card elements remain the same style */
       .badge {
         background: rgba(13, 255, 26, 0.1);
         color: var(--neon-green);
-        padding: 6px 14px;
-        border-radius: 12px;
+        padding: 8px 18px;
+        border-radius: 14px;
         font-size: 11px;
         font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 1px;
         border: 1px solid var(--neon-green);
-        margin-bottom: 20px;
         display: inline-block;
-      }
-
-      h1 {
-        font-size: 28px;
-        margin: 10px 0;
-        font-weight: 700;
+        margin-bottom: 25px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
       }
 
       .price-tag {
-        font-size: 56px;
+        font-size: 68px;
         font-weight: 700;
         color: var(--neon-green);
-        margin: 25px 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        margin: 15px 0;
+        letter-spacing: -2px;
       }
 
-      .price-tag span {
-        font-size: 24px;
-        margin-right: 5px;
-      }
+      .price-tag span { font-size: 28px; vertical-align: top; margin-right: 5px; opacity: 0.8; }
 
       .features-list {
         text-align: left;
-        margin: 30px 0;
+        margin: 35px 0;
         padding: 0;
         list-style: none;
       }
 
       .features-list li {
-        margin-bottom: 15px;
-        font-size: 14px;
+        margin-bottom: 18px;
+        font-size: 15px;
         color: #aaa;
         display: flex;
         align-items: center;
@@ -157,59 +105,54 @@
       .features-list li::before {
         content: '✓';
         color: var(--neon-green);
-        margin-right: 12px;
+        margin-right: 15px;
         font-weight: 900;
       }
 
-      /* The CTA Button with enhanced glow and hover interaction */
       .cta-button {
         display: block;
         background: var(--neon-green);
         color: #000;
         text-decoration: none;
-        padding: 20px;
-        border-radius: 18px;
+        padding: 22px;
+        border-radius: 20px;
         font-weight: 700;
-        font-size: 18px;
-        box-shadow: 0 10px 25px rgba(13, 255, 26, 0.4);
-        transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+        font-size: 19px;
+        box-shadow: 0 12px 35px rgba(13, 255, 26, 0.4);
+        transition: all 0.3s ease;
         border: none;
         cursor: pointer;
       }
 
       .cta-button:hover {
-        background-color: #0bda17;
-        transform: translateY(-3px);
-        box-shadow: 0 15px 35px rgba(13, 255, 26, 0.7);
+        transform: scale(1.04) translateY(-3px);
+        box-shadow: 0 20px 45px rgba(13, 255, 26, 0.6);
+        background-color: #0bff1a;
       }
 
-      .cta-button:active {
-        transform: translateY(1px);
-        box-shadow: 0 5px 15px rgba(13, 255, 26, 0.3);
-      }
+      .cta-button:active { transform: scale(0.98); }
     </style>
   </head>
   <body>
 
-    <div class="container">
-      <div class="price-card">
-        <div class="badge">Special Launch Offer</div>
-        <h1>HookMaster PRO</h1>
-        <p style="color: #666; font-size: 14px;">One-time payment for lifetime access</p>
-        
-        <div class="price-tag"><span>$</span>29</div>
+    <div class="price-card">
+      <div class="badge">Limited Launch Price</div>
+      <h2 style="margin:0; font-size: 26px; letter-spacing: -0.5px;">HookMaster PRO</h2>
+      <p style="color: #666; font-size: 14px; margin-top: 5px;">Lifetime Membership</p>
+      
+      <div class="price-tag"><span>$</span>29</div>
 
-        <ul class="features-list">
-          <li>Full AI Hook Generator Access</li>
-          <li>Viral Video Frameworks</li>
-          <li>Unlimited Content Modules</li>
-          <li>24/7 Priority Support</li>
-        </ul>
+      <ul class="features-list">
+        <li>Viral AI Hook Generator</li>
+        <li>Unlimited Project Exports</li>
+        <li>Premium Strategy Modules</li>
+        <li>Instant Lifetime Updates</li>
+      </ul>
 
-        <a href="https://sandbox-checkout.paddle.com/checkout/custom/pri_01kmwsxhmnefqzw2e6t8hrzzhd" class="cta-button">
-          Get Started Now ⚡
-        </a>
-      </div>
+      <a href="https://sandbox-checkout.paddle.com/checkout/custom?product_id=pro_01kmyc4gzzwhwewczv855y9j29" 
+         class="cta-button">
+        Get Started Now ⚡
+      </a>
     </div>
 
   </body>
