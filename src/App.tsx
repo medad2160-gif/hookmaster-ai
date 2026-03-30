@@ -75,19 +75,16 @@ export default function App() {
     if (!niche.trim()) return;
 
     setLoading(true);
-    setTimeout(() => {
-  const fakeData = {
-    hook: "🔥 سر محدش قالك عليه في المجال ده!",
-    videoIdea: "اعمل فيديو بسيط يشرح فكرة غريبة في مجالك",
-    script: "ابدأ بهوك قوي، بعدين اشرح بسرعة، وختم بسؤال يخلي الناس تتفاعل",
-    tone,
-    niche
+    try {
+      const data = await generateViralContent(niche, tone);
+      setResult(data);
+      setHistory(prev => [data, ...prev].slice(0, 5));
+    } catch (error) {
+      console.error('Generation failed:', error);
+    } finally {
+      setLoading(false);
+    }
   };
-
-  setResult(fakeData);
-  setHistory(prev => [fakeData, ...prev].slice(0, 5));
-  setLoading(false);
-}, 1500);
 
   const copyToClipboard = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
@@ -107,7 +104,7 @@ export default function App() {
             onClick={() => setLang(lang === 'en' ? 'ar' : 'en')}
             className="text-sm text-zinc-400 hover:text-white"
           >
-       س     {lang === 'en' ? 'AR' : 'صEN'}
+            {lang === 'en' ? 'AR' : 'EN'}
           </button>
         </div>
 
