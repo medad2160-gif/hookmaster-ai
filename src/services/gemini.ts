@@ -1,11 +1,13 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { ViralContent, Tone } from "../types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY || "";
+const ai = new GoogleGenAI({ apiKey });
 
 export async function generateViralContent(niche: string, tone: Tone, lang: 'en' | 'ar' = 'en'): Promise<ViralContent> {
-  const languageName = lang === 'ar' ? 'Arabic' : 'English';
-  const response = await ai.models.generateContent({
+  try {
+    const languageName = lang === 'ar' ? 'Arabic' : 'English';
+    const response = await ai.models.generateContent({
     model: "gemini-3-flash-preview",
     contents: `Generate a viral TikTok/Instagram hook, video idea, and short script for the niche: "${niche}" with a ${tone} tone. Respond only in the selected language (${languageName}).`,
     config: {
@@ -32,10 +34,18 @@ export async function generateViralContent(niche: string, tone: Tone, lang: 'en'
     },
   });
 
-  const result = JSON.parse(response.text || "{}");
-  return {
-    ...result,
-    tone,
-    niche,
-  };
+    const text = response.text || "{}";
+    const cleanText = text.replace(/```json\n?|\n?```/g, '').trim();
+    const result = JSON.parse(cleanText);
+    
+    return {
+      ...result,
+      tone,
+      niche,
+      lang,
+    };
+  } catch (error) {
+    console.error("Error in generateViralContent:", error);
+    throw error;
+  }
 }
