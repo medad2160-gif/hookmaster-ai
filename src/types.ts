@@ -4,6 +4,7 @@ export interface ViralContent {
   script: string;
   tone: string;
   niche: string;
+  lang?: string;
 }
 
 export type Tone = 'controversial' | 'educational' | 'storytelling' | 'humorous' | 'inspirational';

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   Sparkles, 
@@ -15,10 +15,72 @@ import {
   RefreshCw, 
   ChevronRight,
   Instagram,
-  Smartphone
+  Smartphone,
+  Globe
 } from 'lucide-react';
 import { generateViralContent } from './services/gemini';
 import { ViralContent, Tone } from './types';
+
+const translations = {
+  en: {
+    badge: "AI-Powered Viral Strategy",
+    titleViral: "Viral",
+    titleHook: "Hook",
+    titleAI: " AI",
+    subtitle: "Stop the scroll and explode your reach. Generate high-converting hooks, ideas, and scripts in seconds.",
+    nicheLabel: "Your Niche or Topic",
+    nichePlaceholder: "e.g. Minimalist Home Decor, Crypto Trading, Vegan Cooking...",
+    toneLabel: "Choose Your Tone",
+    tones: {
+      educational: "Educational",
+      controversial: "Controversial",
+      storytelling: "Storytelling",
+      humorous: "Humorous",
+      inspirational: "Inspirational",
+    },
+    analyzing: "Analyzing Viral Patterns...",
+    generate: "Generate Viral Strategy",
+    blueprint: "Your Viral Blueprint",
+    theHook: "The Hook",
+    visualConcept: "Visual Concept",
+    shortScript: "Short Script",
+    reelsTipTitle: "Reels Tip",
+    reelsTipText: "Use trending audio at low volume (3-5%) to boost discoverability while keeping your voice clear.",
+    tiktokTipTitle: "TikTok Tip",
+    tiktokTipText: "Add on-screen text for the hook immediately. 80% of users scroll with sound off initially.",
+    recentGenerations: "Recent Generations",
+    footer: "© 2026 ViralHook AI. Built for creators who mean business."
+  },
+  ar: {
+    badge: "استراتيجية الانتشار المدعومة بالذكاء الاصطناعي",
+    titleViral: "فايرل",
+    titleHook: "هوك",
+    titleAI: " AI",
+    subtitle: "أوقف التمرير وضاعف وصولك. قم بإنشاء خطافات وأفكار ونصوص عالية التحويل في ثوانٍ.",
+    nicheLabel: "مجالك أو موضوعك",
+    nichePlaceholder: "مثال: ديكور المنزل البسيط، تداول العملات الرقمية، الطبخ النباتي...",
+    toneLabel: "اختر أسلوبك",
+    tones: {
+      educational: "تعليمي",
+      controversial: "مثير للجدل",
+      storytelling: "قصصي",
+      humorous: "فكاهي",
+      inspirational: "ملهم",
+    },
+    analyzing: "جاري تحليل أنماط الانتشار...",
+    generate: "إنشاء استراتيجية الانتشار",
+    blueprint: "مخطط الانتشار الخاص بك",
+    theHook: "الخطاف (Hook)",
+    visualConcept: "الفكرة المرئية",
+    shortScript: "النص القصير (Script)",
+    reelsTipTitle: "نصيحة ريلز",
+    reelsTipText: "استخدم صوتًا رائجًا بحجم منخفض (3-5٪) لزيادة الاكتشاف مع الحفاظ على وضوح صوتك.",
+    tiktokTipTitle: "نصيحة تيك توك",
+    tiktokTipText: "أضف نصًا على الشاشة للخطاف فورًا. 80٪ من المستخدمين يمررون والصوت مغلق في البداية.",
+    recentGenerations: "النتائج السابقة",
+    footer: "© 2026 ViralHook AI. صُمم للمبدعين الجادين."
+  }
+};
 
 export default function App() {
   const [niche, setNiche] = useState('');
@@ -27,13 +89,21 @@ export default function App() {
   const [result, setResult] = useState<ViralContent | null>(null);
   const [history, setHistory] = useState<ViralContent[]>([]);
   const [copied, setCopied] = useState<string | null>(null);
+  const [lang, setLang] = useState<'en' | 'ar'>('en');
+
+  useEffect(() => {
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.lang = lang;
+  }, [lang]);
+
+  const t = translations[lang];
 
   const tones: { value: Tone; label: string; icon: string }[] = [
-    { value: 'educational', label: 'Educational', icon: '🎓' },
-    { value: 'controversial', label: 'Controversial', icon: '🔥' },
-    { value: 'storytelling', label: 'Storytelling', icon: '📖' },
-    { value: 'humorous', label: 'Humorous', icon: '😂' },
-    { value: 'inspirational', label: 'Inspirational', icon: '✨' },
+    { value: 'educational', label: t.tones.educational, icon: '🎓' },
+    { value: 'controversial', label: t.tones.controversial, icon: '🔥' },
+    { value: 'storytelling', label: t.tones.storytelling, icon: '📖' },
+    { value: 'humorous', label: t.tones.humorous, icon: '😂' },
+    { value: 'inspirational', label: t.tones.inspirational, icon: '✨' },
   ];
 
   const handleGenerate = async (e: React.FormEvent) => {
@@ -42,7 +112,7 @@ export default function App() {
 
     setLoading(true);
     try {
-      const data = await generateViralContent(niche, tone);
+      const data = await generateViralContent(niche, tone, lang);
       setResult(data);
       setHistory(prev => [data, ...prev].slice(0, 5));
     } catch (error) {
@@ -60,6 +130,17 @@ export default function App() {
 
   return (
     <div className="min-h-screen p-4 md:p-8 max-w-4xl mx-auto">
+      {/* Language Toggle */}
+      <div className="flex justify-end mb-4">
+        <button
+          onClick={() => setLang(lang === 'en' ? 'ar' : 'en')}
+          className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-zinc-100 transition-colors text-sm font-medium"
+        >
+          <Globe size={16} />
+          {lang === 'en' ? 'العربية' : 'English'}
+        </button>
+      </div>
+
       {/* Header */}
       <header className="mb-12 text-center">
         <motion.div
@@ -68,13 +149,13 @@ export default function App() {
           className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm font-medium mb-4"
         >
           <Sparkles size={14} />
-          <span>AI-Powered Viral Strategy</span>
+          <span>{t.badge}</span>
         </motion.div>
         <h1 className="text-5xl md:text-7xl font-bold font-display tracking-tight mb-4">
-          Viral<span className="gradient-text">Hook</span> AI
+          {t.titleViral}<span className="gradient-text">{t.titleHook}</span>{t.titleAI}
         </h1>
         <p className="text-zinc-400 text-lg max-w-xl mx-auto">
-          Stop the scroll and explode your reach. Generate high-converting hooks, ideas, and scripts in seconds.
+          {t.subtitle}
         </p>
       </header>
 
@@ -84,14 +165,14 @@ export default function App() {
           <form onSubmit={handleGenerate} className="space-y-6">
             <div className="space-y-2">
               <label htmlFor="niche" className="text-sm font-semibold text-zinc-400 uppercase tracking-wider">
-                Your Niche or Topic
+                {t.nicheLabel}
               </label>
               <input
                 id="niche"
                 type="text"
                 value={niche}
                 onChange={(e) => setNiche(e.target.value)}
-                placeholder="e.g. Minimalist Home Decor, Crypto Trading, Vegan Cooking..."
+                placeholder={t.nichePlaceholder}
                 className="w-full brutalist-input"
                 required
               />
@@ -99,22 +180,22 @@ export default function App() {
 
             <div className="space-y-2">
               <label className="text-sm font-semibold text-zinc-400 uppercase tracking-wider">
-                Choose Your Tone
+                {t.toneLabel}
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-                {tones.map((t) => (
+                {tones.map((tItem) => (
                   <button
-                    key={t.value}
+                    key={tItem.value}
                     type="button"
-                    onClick={() => setTone(t.value)}
+                    onClick={() => setTone(tItem.value)}
                     className={`flex flex-col items-center justify-center p-3 rounded-xl border transition-all ${
-                      tone === t.value
+                      tone === tItem.value
                         ? 'bg-emerald-500/10 border-emerald-500 text-emerald-400'
                         : 'bg-zinc-950 border-zinc-800 text-zinc-500 hover:border-zinc-700'
                     }`}
                   >
-                    <span className="text-2xl mb-1">{t.icon}</span>
-                    <span className="text-xs font-medium">{t.label}</span>
+                    <span className="text-2xl mb-1">{tItem.icon}</span>
+                    <span className="text-xs font-medium">{tItem.label}</span>
                   </button>
                 ))}
               </div>
@@ -128,12 +209,12 @@ export default function App() {
               {loading ? (
                 <>
                   <RefreshCw size={20} className="animate-spin" />
-                  <span>Analyzing Viral Patterns...</span>
+                  <span>{t.analyzing}</span>
                 </>
               ) : (
                 <>
                   <Zap size={20} className="group-hover:fill-current" />
-                  <span>Generate Viral Strategy</span>
+                  <span>{t.generate}</span>
                 </>
               )}
             </button>
@@ -151,18 +232,18 @@ export default function App() {
               className="space-y-6"
             >
               <div className="flex items-center gap-2 text-emerald-400 font-bold text-xl">
-                <ChevronRight size={24} />
-                <h2>Your Viral Blueprint</h2>
+                <ChevronRight size={24} className={lang === 'ar' ? 'rotate-180' : ''} />
+                <h2>{t.blueprint}</h2>
               </div>
 
               <div className="grid gap-6">
                 {/* Hook Card */}
                 <div className="brutalist-card relative overflow-hidden group">
-                  <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500" />
+                  <div className={`absolute top-0 ${lang === 'ar' ? 'right-0' : 'left-0'} w-1 h-full bg-emerald-500`} />
                   <div className="flex justify-between items-start mb-4">
                     <div className="flex items-center gap-2 text-emerald-400 font-semibold uppercase text-xs tracking-widest">
                       <Zap size={14} />
-                      <span>The Hook</span>
+                      <span>{t.theHook}</span>
                     </div>
                     <button
                       onClick={() => copyToClipboard(result.hook, 'hook')}
@@ -178,11 +259,11 @@ export default function App() {
 
                 {/* Video Idea Card */}
                 <div className="brutalist-card relative overflow-hidden group">
-                  <div className="absolute top-0 left-0 w-1 h-full bg-cyan-500" />
+                  <div className={`absolute top-0 ${lang === 'ar' ? 'right-0' : 'left-0'} w-1 h-full bg-cyan-500`} />
                   <div className="flex justify-between items-start mb-4">
                     <div className="flex items-center gap-2 text-cyan-400 font-semibold uppercase text-xs tracking-widest">
                       <Video size={14} />
-                      <span>Visual Concept</span>
+                      <span>{t.visualConcept}</span>
                     </div>
                     <button
                       onClick={() => copyToClipboard(result.videoIdea, 'idea')}
@@ -198,11 +279,11 @@ export default function App() {
 
                 {/* Script Card */}
                 <div className="brutalist-card relative overflow-hidden group">
-                  <div className="absolute top-0 left-0 w-1 h-full bg-violet-500" />
+                  <div className={`absolute top-0 ${lang === 'ar' ? 'right-0' : 'left-0'} w-1 h-full bg-violet-500`} />
                   <div className="flex justify-between items-start mb-4">
                     <div className="flex items-center gap-2 text-violet-400 font-semibold uppercase text-xs tracking-widest">
                       <FileText size={14} />
-                      <span>Short Script</span>
+                      <span>{t.shortScript}</span>
                     </div>
                     <button
                       onClick={() => copyToClipboard(result.script, 'script')}
@@ -222,21 +303,21 @@ export default function App() {
               {/* Tips Footer */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="p-4 rounded-2xl bg-zinc-900/50 border border-zinc-800 flex items-start gap-3">
-                  <div className="p-2 rounded-lg bg-pink-500/10 text-pink-400">
+                  <div className="p-2 rounded-lg bg-pink-500/10 text-pink-400 shrink-0">
                     <Instagram size={20} />
                   </div>
                   <div>
-                    <h4 className="font-bold text-sm text-zinc-200">Reels Tip</h4>
-                    <p className="text-xs text-zinc-500 mt-1">Use trending audio at low volume (3-5%) to boost discoverability while keeping your voice clear.</p>
+                    <h4 className="font-bold text-sm text-zinc-200">{t.reelsTipTitle}</h4>
+                    <p className="text-xs text-zinc-500 mt-1">{t.reelsTipText}</p>
                   </div>
                 </div>
                 <div className="p-4 rounded-2xl bg-zinc-900/50 border border-zinc-800 flex items-start gap-3">
-                  <div className="p-2 rounded-lg bg-blue-500/10 text-blue-400">
+                  <div className="p-2 rounded-lg bg-blue-500/10 text-blue-400 shrink-0">
                     <Smartphone size={20} />
                   </div>
                   <div>
-                    <h4 className="font-bold text-sm text-zinc-200">TikTok Tip</h4>
-                    <p className="text-xs text-zinc-500 mt-1">Add on-screen text for the hook immediately. 80% of users scroll with sound off initially.</p>
+                    <h4 className="font-bold text-sm text-zinc-200">{t.tiktokTipTitle}</h4>
+                    <p className="text-xs text-zinc-500 mt-1">{t.tiktokTipText}</p>
                   </div>
                 </div>
               </div>
@@ -247,22 +328,22 @@ export default function App() {
         {/* History Section */}
         {history.length > 1 && (
           <section className="mt-12">
-            <h3 className="text-zinc-500 font-bold uppercase text-xs tracking-widest mb-4">Recent Generations</h3>
+            <h3 className="text-zinc-500 font-bold uppercase text-xs tracking-widest mb-4">{t.recentGenerations}</h3>
             <div className="space-y-3">
               {history.slice(1).map((item, idx) => (
                 <button
                   key={idx}
                   onClick={() => setResult(item)}
-                  className="w-full text-left p-4 rounded-xl bg-zinc-900/30 border border-zinc-800/50 hover:bg-zinc-800/50 transition-all flex items-center justify-between group"
+                  className="w-full text-start p-4 rounded-xl bg-zinc-900/30 border border-zinc-800/50 hover:bg-zinc-800/50 transition-all flex items-center justify-between group"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="text-lg">{tones.find(t => t.value === item.tone)?.icon}</span>
+                    <span className="text-lg">{tones.find(tItem => tItem.value === item.tone)?.icon}</span>
                     <div>
                       <p className="text-sm font-bold text-zinc-300 truncate max-w-[200px] md:max-w-md">{item.hook}</p>
                       <p className="text-xs text-zinc-600 uppercase tracking-tighter">{item.niche}</p>
                     </div>
                   </div>
-                  <ChevronRight size={16} className="text-zinc-700 group-hover:text-zinc-400 transition-colors" />
+                  <ChevronRight size={16} className={`text-zinc-700 group-hover:text-zinc-400 transition-colors ${lang === 'ar' ? 'rotate-180' : ''}`} />
                 </button>
               ))}
             </div>
@@ -271,9 +352,8 @@ export default function App() {
       </main>
 
       <footer className="mt-20 pb-8 text-center text-zinc-600 text-sm">
-        <p>© 2026 ViralHook AI. Built for creators who mean business.</p>
+        <p>{t.footer}</p>
       </footer>
     </div>
   );
-                    }
-                  
+}
