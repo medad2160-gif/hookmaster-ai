@@ -3,84 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HookMaster AI | Viral Generator</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>HookMaster AI</title>
     <style>
-        :root {
-            --neon-green: #0dff1a;
-            --dark-bg: #050505;
-            --card-bg: #111;
-        }
-
         body {
-            margin: 0;
-            padding: 20px;
-            background-color: var(--dark-bg);
+            background-color: #000;
             color: #fff;
-            font-family: 'Poppins', sans-serif;
+            font-family: Arial, sans-serif;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            overflow-x: hidden;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
-
-        /* Moving Glow Background */
-        body::before {
-            content: '';
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            background: var(--neon-green);
-            filter: blur(120px);
-            opacity: 0.1;
-            z-index: -1;
-            animation: drift 10s infinite alternate ease-in-out;
-        }
-
-        @keyframes drift {
-            from { transform: translate(-50%, -50%); }
-            to { transform: translate(50%, 50%); }
-        }
-
         .container {
-            width: 100%;
-            max-width: 500px;
-            background: var(--card-bg);
-            padding: 40px 30px;
-            border-radius: 28px;
-            border: 1px solid #222;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
             text-align: center;
+            background: #111;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            border: 1px solid #333;
         }
-
-        h1 {
-            font-size: 28px;
-            margin-bottom: 5px;
-            color: var(--neon-green);
-        }
-
-        p.subtitle {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 30px;
-        }
-
-        .input-group {
-            text-align: left;
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            font-size: 13px;
-            color: #aaa;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        textarea, input {
+        input, textarea {
             width: 100%;
-            padding:
-              
+            padding: 12px;
+            margin: 10px 0;
+            background: #222;
+            border: 1px solid #444;
+            color: #fff;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #0dff1a;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        #results {
+            margin-top: 20px;
+            text-align: left;
+        }
+        .hook {
+            background: #222;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border-left: 3px solid #0dff1a;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>HookMaster AI</h1>
+    <textarea id="topic" placeholder="Video Topic..."></textarea>
+    <input type="text" id="audience" placeholder="Target Audience...">
+    <button onclick="generate()">Generate Hooks ✨</button>
+    
+    <div id="results"></div>
+</div>
+
+<script>
+    function generate() {
+        const topic = document.getElementById('topic').value;
+        const results = document.getElementById('results');
+        
+        if(!topic) return alert("Enter a topic!");
+
+        results.innerHTML = '<p style="color:#0dff1a">Generating...</p>';
+        
+        setTimeout(() => {
+            results.innerHTML = `
+                <div class="hook">"Stop scrolling! This secret about ${topic} will change everything."</div>
+                <div class="hook">"If you're a creator, you need to know this one trick about ${topic}."</div>
+            `;
+        }, 500);
+    }
+</script>
+
+</body>
+</html>
