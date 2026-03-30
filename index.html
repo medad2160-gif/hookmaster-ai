@@ -24,25 +24,26 @@
     }
 
     .badge {
-      color: #00ff00;
-      border: 1px solid #00ff00;
-      display: inline-block;
-      padding: 5px 10px;
+      color: #0bff1a;
+      border: 1px solid #0bff1a;
+      padding: 6px 12px;
       border-radius: 20px;
+      display: inline-block;
       margin-bottom: 15px;
+      font-size: 12px;
     }
 
     .price-tag {
       font-size: 48px;
-      color: #00ff00;
+      color: #0bff1a;
       margin: 20px 0;
     }
 
     .features-list {
       list-style: none;
       padding: 0;
+      margin: 20px 0;
       text-align: left;
-      margin-bottom: 20px;
     }
 
     .features-list li {
@@ -50,18 +51,20 @@
     }
 
     .cta-button {
-      background: #00ff00;
+      background: #0bff1a;
       color: black;
       padding: 15px;
+      border-radius: 12px;
+      display: block;
+      text-decoration: none;
+      font-weight: bold;
       border: none;
-      border-radius: 10px;
       cursor: pointer;
-      font-size: 18px;
-      width: 100%;
     }
 
     .cta-button:hover {
       transform: scale(1.04);
+      background-color: #0bff1a;
     }
   </style>
 </head>
@@ -71,7 +74,7 @@
   <div class="price-card">
     <div class="badge">Limited Launch Price</div>
     <h2>HookMaster PRO</h2>
-    <p>Lifetime Membership</p>
+    <p style="color:#666;">Lifetime Membership</p>
 
     <div class="price-tag">$29</div>
 
@@ -101,7 +104,8 @@
       Paddle.Checkout.open({
         items: [
           {
-            priceId: "pri_01kmyd5th55q5xpyg4wjt5jfwz"
+            priceId: "pri_01kmyd5th55q5xpyg4wjt5jfwz",
+            quantity: 1
           }
         ]
       });
@@ -109,4 +113,4 @@
   </script>
 
 </body>
-</html>a
+</html>
