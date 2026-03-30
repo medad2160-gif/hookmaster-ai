@@ -1,89 +1,205 @@
-import { useState } from "react";
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { 
+  Sparkles, 
+  Zap, 
+  Video, 
+  FileText, 
+  Copy, 
+  Check, 
+  RefreshCw, 
+  ChevronRight,
+  Instagram,
+  Smartphone
+} from 'lucide-react';
+import { generateViralContent } from './services/gemini';
+import { ViralContent, Tone } from './types';
 
 export default function App() {
-  const [niche, setNiche] = useState("");
-  const [tone, setTone] = useState("تعليمي");
-  const [result, setResult] = useState("");
-  const [lang, setLang] = useState("ar");
 
-  const toggleLang = () => {
-    setLang(lang === "ar" ? "en" : "ar");
+  const [lang, setLang] = useState<'en' | 'ar'>('en');
+
+  const text = {
+    en: {
+      badge: "AI-Powered Viral Strategy",
+      title: "ViralHook AI",
+      subtitle: "Stop the scroll and explode your reach. Generate high-converting hooks, ideas, and scripts in seconds.",
+      niche: "Your Niche or Topic",
+      placeholder: "e.g. Minimalist Home Decor, Crypto Trading, Vegan Cooking...",
+      tone: "Choose Your Tone",
+      generate: "Generate Viral Strategy",
+      loading: "Analyzing Viral Patterns...",
+      result: "Your Viral Blueprint",
+      hook: "The Hook",
+      idea: "Visual Concept",
+      script: "Short Script",
+    },
+    ar: {
+      badge: "استراتيجية ذكاء اصطناعي",
+      title: "مولد الأفكار الفيرال",
+      subtitle: "خلّي الناس توقف عندك وزوّد وصولك. أنشئ أفكار وهوكات وسكربتات في ثواني.",
+      niche: "اكتب المجال",
+      placeholder: "مثال: ديكور منزلي، كريبتو، طبخ نباتي...",
+      tone: "اختر النمط",
+      generate: "إنشاء",
+      loading: "جاري التحليل...",
+      result: "الخطة الفيرال",
+      hook: "الهُوك",
+      idea: "فكرة الفيديو",
+      script: "سكريبت قصير",
+    }
   };
 
-  const generate = async () => {
-    setResult(lang === "ar" ? "جاري التحميل..." : "Loading...");
+  const [niche, setNiche] = useState('');
+  const [tone, setTone] = useState<Tone>('educational');
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState<ViralContent | null>(null);
+  const [history, setHistory] = useState<ViralContent[]>([]);
+  const [copied, setCopied] = useState<string | null>(null);
 
-    const prompt =
-      lang === "ar"
-        ? `اكتب أفكار وهُوكات وسكريبتات فيديو في مجال ${niche} بأسلوب ${tone}`
-        : `Create viral hooks and scripts about ${niche} in a ${tone} tone`;
+  const tones: { value: Tone; label: string; icon: string }[] = [
+    { value: 'educational', label: lang === 'ar' ? 'تعليمي' : 'Educational', icon: '🎓' },
+    { value: 'controversial', label: lang === 'ar' ? 'جدلي' : 'Controversial', icon: '🔥' },
+    { value: 'storytelling', label: lang === 'ar' ? 'قصصي' : 'Storytelling', icon: '📖' },
+    { value: 'humorous', label: lang === 'ar' ? 'مضحك' : 'Humorous', icon: '😂' },
+    { value: 'inspirational', label: lang === 'ar' ? 'تحفيزي' : 'Inspirational', icon: '✨' },
+  ];
 
-    const res = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer YOUR_API_KEY_HERE",
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages: [{ role: "user", content: prompt }],
-      }),
-    });
+  const handleGenerate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!niche.trim()) return;
 
-    const data = await res.json();
-    setResult(data.choices[0].message.content);
+    setLoading(true);
+    try {
+      const data = await generateViralContent(niche, tone);
+      setResult(data);
+      setHistory(prev => [data, ...prev].slice(0, 5));
+    } catch (error) {
+      console.error('Generation failed:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const copyToClipboard = (text: string, id: string) => {
+    navigator.clipboard.writeText(text);
+    setCopied(id);
+    setTimeout(() => setCopied(null), 2000);
   };
 
   return (
-    <div style={{ padding: 20, background: "#0d0f14", minHeight: "100vh", color: "white" }}>
+    <div dir={lang === 'ar' ? 'rtl' : 'ltr'} className="min-h-screen p-4 md:p-8 max-w-4xl mx-auto">
 
-      <button onClick={toggleLang}>
-        🌐 {lang === "ar" ? "EN" : "AR"}
-      </button>
+      {/* Header */}
+      <header className="mb-12 text-center">
 
-      <h2>
-        {lang === "ar" ? "مولد الأفكار الفيرال" : "Viral Hook Generator"}
-      </h2>
+        {/* Language Toggle */}
+        <div className="flex justify-end mb-4">
+          <button
+            onClick={() => setLang(lang === 'en' ? 'ar' : 'en')}
+            className="text-sm text-zinc-400 hover:text-white"
+          >
+            {lang === 'en' ? 'AR' : 'EN'}
+          </button>
+        </div>
 
-      <input
-        value={niche}
-        onChange={(e) => setNiche(e.target.value)}
-        placeholder={lang === "ar" ? "اكتب المجال" : "Enter niche"}
-        style={{ width: "100%", padding: 10, marginTop: 10 }}
-      />
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm font-medium mb-4"
+        >
+          <Sparkles size={14} />
+          <span>{text[lang].badge}</span>
+        </motion.div>
 
-      <select
-        value={tone}
-        onChange={(e) => setTone(e.target.value)}
-        style={{ width: "100%", padding: 10, marginTop: 10 }}
-      >
-        {lang === "ar" ? (
-          <>
-            <option>تعليمي</option>
-            <option>جدلي</option>
-            <option>قصصي</option>
-            <option>كوميدي</option>
-            <option>تحفيزي</option>
-          </>
-        ) : (
-          <>
-            <option>Educational</option>
-            <option>Controversial</option>
-            <option>Storytelling</option>
-            <option>Humorous</option>
-            <option>Inspirational</option>
-          </>
-        )}
-      </select>
+        <h1 className="text-5xl md:text-7xl font-bold font-display tracking-tight mb-4">
+          {text[lang].title}
+        </h1>
 
-      <button onClick={generate} style={{ marginTop: 10 }}>
-        {lang === "ar" ? "إنشاء" : "Generate"}
-      </button>
+        <p className="text-zinc-400 text-lg max-w-xl mx-auto">
+          {text[lang].subtitle}
+        </p>
+      </header>
 
-      <div style={{ marginTop: 20, whiteSpace: "pre-line" }}>
-        {result}
-      </div>
+      <main className="grid gap-8">
 
+        {/* Input */}
+        <section className="brutalist-card">
+          <form onSubmit={handleGenerate} className="space-y-6">
+
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-zinc-400 uppercase tracking-wider">
+                {text[lang].niche}
+              </label>
+              <input
+                type="text"
+                value={niche}
+                onChange={(e) => setNiche(e.target.value)}
+                placeholder={text[lang].placeholder}
+                className="w-full brutalist-input"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-zinc-400 uppercase tracking-wider">
+                {text[lang].tone}
+              </label>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+                {tones.map((t) => (
+                  <button
+                    key={t.value}
+                    type="button"
+                    onClick={() => setTone(t.value)}
+                    className={`flex flex-col items-center justify-center p-3 rounded-xl border ${
+                      tone === t.value
+                        ? 'bg-emerald-500/10 border-emerald-500 text-emerald-400'
+                        : 'bg-zinc-950 border-zinc-800 text-zinc-500'
+                    }`}
+                  >
+                    <span className="text-2xl">{t.icon}</span>
+                    <span className="text-xs">{t.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <button type="submit" className="w-full brutalist-button">
+              {loading ? text[lang].loading : text[lang].generate}
+            </button>
+
+          </form>
+        </section>
+
+        {/* Result */}
+        <AnimatePresence>
+          {result && (
+            <motion.section className="space-y-6">
+              <h2 className="text-xl text-emerald-400 font-bold">
+                {text[lang].result}
+              </h2>
+
+              <div className="brutalist-card">
+                <p className="text-white text-xl">"{result.hook}"</p>
+              </div>
+
+              <div className="brutalist-card">
+                <p className="text-zinc-300">{result.videoIdea}</p>
+              </div>
+
+              <div className="brutalist-card">
+                <p className="text-zinc-300">{result.script}</p>
+              </div>
+            </motion.section>
+          )}
+        </AnimatePresence>
+
+      </main>
     </div>
   );
 }
