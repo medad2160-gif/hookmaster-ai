@@ -1,91 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HookMaster AI</title>
-    <style>
-        body {
-            background-color: #000;
-            color: #fff;
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .container {
-            text-align: center;
-            background: #111;
-            padding: 30px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 400px;
-            border: 1px solid #333;
-        }
-        input, textarea {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            background: #222;
-            border: 1px solid #444;
-            color: #fff;
-            border-radius: 8px;
-            box-sizing: border-box;
-        }
-        button {
-            width: 100%;
-            padding: 12px;
-            background: #0dff1a;
-            color: #000;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        #results {
-            margin-top: 20px;
-            text-align: left;
-        }
-        .hook {
-            background: #222;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            border-left: 3px solid #0dff1a;
-            font-size: 14px;
-        }
-    </style>
-</head>
-<body>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ViralHook AI</title>
 
-<div class="container">
-    <h1>HookMaster AI</h1>
-    <textarea id="topic" placeholder="Video Topic..."></textarea>
-    <input type="text" id="audience" placeholder="Target Audience...">
-    <button onclick="generate()">Generate Hooks ✨</button>
-    
-    <div id="results"></div>
-</div>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-<script>
-    function generate() {
-        const topic = document.getElementById('topic').value;
-        const results = document.getElementById('results');
-        
-        if(!topic) return alert("Enter a topic!");
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
 
-        results.innerHTML = '<p style="color:#0dff1a">Generating...</p>';
-        
-        setTimeout(() => {
-            results.innerHTML = `
-                <div class="hook">"Stop scrolling! This secret about ${topic} will change everything."</div>
-                <div class="hook">"If you're a creator, you need to know this one trick about ${topic}."</div>
-            `;
-        }, 500);
-    }
-</script>
+body {
+  background: #0d0f14;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
 
-</body>
-</html>
+.container {
+  width: 100%;
+  max-width: 420px;
+}
+
+/* badge */
+.badge {
+  background: rgba(0,255,150,0.1);
+  color: #00ffb3;
+  padding: 8px 14px;
+  border-radius: 20px;
+  display: inline-block;
+  font-size: 13px;
+  margin-bottom: 15px;
+}
+
+/* title */
+h1 {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+h1 span {
+  color: #00ffb3;
+}
+
+/* desc */
+.desc {
+  color: #aaa;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+/* card */
+.card {
+  background: #151821;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+/* input */
+input {
+  width: 100%;
+  padding: 14px;
+  background: #0d0f14;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  outline: none;
+  margin-top: 10px;
+}
+
+/* tones */
+.tones {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.tone {
+  background: #0d0f14;
+  padding: 16px;
+  border-radius: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition:
