@@ -1,6 +1,15 @@
 import { GoogleGenAI, Type } from "@google/genai";
 
 export default async function handler(req, res) {
+  // CORS headers
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
@@ -14,7 +23,7 @@ export default async function handler(req, res) {
   try {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
-      return res.status(500).json({ error: 'GEMINI_API_KEY is not configured' });
+      return res.status(500).json({ error: 'GEMINI_API_KEY is not configured in Vercel settings' });
     }
 
     const ai = new GoogleGenAI({ apiKey });
@@ -47,7 +56,11 @@ export default async function handler(req, res) {
       },
     });
 
-    const result = JSON.parse(response.text);
+    let text = response.text;
+    // Clean potential markdown from response
+    text = text.replace(/```json/g, '').replace(/```/g, '').trim();
+    
+    const result = JSON.parse(text);
     return res.status(200).json(result);
   } catch (error) {
     console.error("Error in generateViralContent:", error);
