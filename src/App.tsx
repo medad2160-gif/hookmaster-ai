@@ -37,6 +37,44 @@ export default function App() {
   ];
 
   const handleGenerate = async (e: React.FormEvent) => {
+  e.preventDefault();
+  if (!niche.trim()) return;
+
+  setLoading(true);
+
+  try {
+    const res = await fetch("/api/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ niche, tone }),
+    });
+
+    const data = await res.json();
+
+    if (data.error) {
+      console.error(data.error);
+      return;
+    }
+
+    const formatted = {
+      hook: data.result.split("\n")[0] || data.result,
+      videoIdea: "استخدم الفكرة دي كفيديو يجذب الانتباه",
+      script: data.result,
+      niche: niche,
+      tone: tone,
+    };
+
+    setResult(formatted);
+    setHistory((prev) => [formatted, ...prev].slice(0, 5));
+
+  } catch (error) {
+    console.error("Generation failed:", error);
+  } finally {
+    setLoading(false);
+  }
+};
     e.preventDefault();
     if (!niche.trim()) return;
 
@@ -59,7 +97,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen p-4 md:p-8 max-w-4xl mx-auto">
+    <div clasasName="min-h-screen p-4 md:p-8 max-w-4xl mx-auto">
       {/* Header */}
       <header className="mb-12 text-center">
         <motion.div
