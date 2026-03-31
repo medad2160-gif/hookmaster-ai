@@ -13,14 +13,39 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
     <style>
-        body { background-color: #09090b; color: #f4f4f5; font-family: 'Noto Sans Arabic', sans-serif; }
-        .gradient-text { background: linear-gradient(to right, #10b981, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .brutalist-card { background: #18181b; border: 1px solid #27272a; border-radius: 1rem; padding: 1.5rem; }
-        .brutalist-input { background: #09090b; border: 1px solid #27272a; border-radius: 0.75rem; padding: 0.75rem 1rem; width: 100%; outline: none; }
-        .brutalist-input:focus { border-color: #10b981; }
-        .brutalist-button { background: #10b981; color: #09090b; font-weight: 700; padding: 0.85rem; border-radius: 0.75rem; width: 100%; transition: 0.2s; }
-        .brutalist-button:hover { background: #34d399; transform: translateY(-2px); }
-        .brutalist-button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        body { background-color: #0d0d0d; color: #ffffff; font-family: 'Noto Sans Arabic', sans-serif; }
+        .container { max-width: 450px; margin: 0 auto; padding: 20px; }
+        .input-group { background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 15px; margin-bottom: 20px; }
+        .input-label { color: #888; font-size: 14px; margin-bottom: 10px; display: block; }
+        .text-input { background: transparent; border: none; color: white; width: 100%; outline: none; font-size: 18px; }
+        
+        .style-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        .style-card { 
+            background: #1a1a1a; border: 2px solid transparent; border-radius: 12px; 
+            padding: 20px; text-align: center; cursor: pointer; transition: 0.2s;
+        }
+        .style-card.active { border-color: #2ecc71; background: #1a1a1a; }
+        .style-card:hover { background: #262626; }
+        .style-icon { font-size: 24px; margin-bottom: 8px; display: block; }
+        .style-name { font-size: 14px; color: #ccc; }
+        .style-card.active .style-name { color: #2ecc71; }
+
+        .generate-btn { 
+            background: #2ecc71; color: #000; font-weight: bold; width: 100%; 
+            padding: 15px; border-radius: 12px; font-size: 18px; transition: 0.2s;
+        }
+        .generate-btn:hover { background: #27ae60; transform: scale(0.98); }
+        .generate-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .error-box { 
+            background: #2d1616; border: 1px solid #4d1a1a; color: #ff6b6b; 
+            padding: 15px; border-radius: 12px; margin-top: 20px; text-align: center; font-size: 14px;
+        }
+        
+        .result-card { background: #1a1a1a; border-radius: 12px; padding: 20px; margin-top: 20px; border-right: 4px solid #2ecc71; }
+        .result-label { color: #2ecc71; font-size: 12px; font-weight: bold; margin-bottom: 8px; text-transform: uppercase; }
+        
+        footer { text-align: center; color: #555; font-size: 12px; margin-top: 40px; }
     </style>
 </head>
 <body>
@@ -36,11 +61,18 @@
             const [result, setResult] = useState(null);
             const [error, setError] = useState(null);
 
+            const styles = [
+                { id: 'controversial', name: 'مثير للجدل', icon: '🔥' },
+                { id: 'educational', name: 'تعليمي', icon: '🎓' },
+                { id: 'humorous', name: 'فكاهي', icon: '😂' },
+                { id: 'storytelling', name: 'قصصي', icon: '📖' },
+                { id: 'inspiring', name: 'ملهم', icon: '✨' }
+            ];
+
             const handleGenerate = async (e) => {
-                if (e) e.preventDefault(); // منع إعادة التحميل
-                
+                if (e) e.preventDefault();
                 if (!niche.trim()) {
-                    setError('الرجاء إدخال موضوع أولاً');
+                    setError('الرجاء إدخال المجال أولاً');
                     return;
                 }
 
@@ -57,25 +89,84 @@
 
                     const contentType = response.headers.get("content-type");
                     if (!contentType || !contentType.includes("application/json")) {
-                        const text = await response.text();
-                        console.error("Non-JSON response:", text);
-                        throw new Error('حدث خطأ في الخادم (API غير موجود أو معطل). تأكد من رفع مجلد api وملف generate.js');
+                        throw new Error('Unexpected token \'T\', "The page c"... is not valid JSON');
                     }
 
                     const data = await response.json();
-
-                    if (!response.ok) {
-                        throw new Error(data.error || 'فشل في جلب البيانات من السيرفر');
-                    }
-
+                    if (!response.ok) throw new Error(data.error || 'فشل في جلب البيانات');
                     setResult(data);
                 } catch (err) {
-                    console.error(err);
-                    setError(err.message || 'حدث خطأ غير متوقع');
+                    setError(err.message);
                 } finally {
                     setLoading(false);
                 }
             };
+
+            return (
+                <div className="container">
+                    <div className="input-group">
+                        <label className="input-label">منتجات</label>
+                        <input 
+                            className="text-input"
+                            value={niche}
+                            onChange={(e) => setNiche(e.target.value)}
+                            placeholder="اكتب مجالك هنا..."
+                        />
+                    </div>
+
+                    <h3 className="input-label" style={{textAlign: 'right', marginBottom: '15px'}}>اختر الأسلوب</h3>
+                    
+                    <div className="style-grid">
+                        {styles.map(s => (
+                            <div 
+                                key={s.id}
+                                className={`style-card ${tone === s.id ? 'active' : ''}`}
+                                onClick={() => setTone(s.id)}
+                                style={s.id === 'inspiring' ? {gridColumn: 'span 2'} : {}}
+                            >
+                                <span className="style-icon">{s.icon}</span>
+                                <span className="style-name">{s.name}</span>
+                            </div>
+                        ))}
+                    </div>
+
+                    <button 
+                        onClick={handleGenerate}
+                        disabled={loading}
+                        className="generate-btn"
+                    >
+                        {loading ? 'جاري الإنشاء...' : 'إنشاء استراتيجية الانتشار'}
+                    </button>
+
+                    {error && (
+                        <div className="error-box">
+                            {error}
+                        </div>
+                    )}
+
+                    {result && (
+                        <div className="results">
+                            <div className="result-card">
+                                <div className="result-label">الخطاف (Hook)</div>
+                                <p style={{fontSize: '18px', fontWeight: 'bold'}}>{result.hook}</p>
+                            </div>
+                            <div className="result-card" style={{borderColor: '#3498db'}}>
+                                <div className="result-label" style={{color: '#3498db'}}>الفكرة المرئية</div>
+                                <p>{result.videoIdea}</p>
+                            </div>
+                            <div className="result-card" style={{borderColor: '#9b59b6'}}>
+                                <div className="result-label" style={{color: '#9b59b6'}}>النص (Script)</div>
+                                <p style={{whiteSpace: 'pre-wrap'}}>{result.script}</p>
+                            </div>
+                        </div>
+                    )}
+
+                    <footer>
+                        © 2026 ViralHook AI. صمم للمبدعين الجادين.
+                    </footer>
+                </div>
+            );
+        };
 
             return (
                 <div className="min-h-screen p-6 max-w-2xl mx-auto">
