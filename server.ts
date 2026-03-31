@@ -12,10 +12,17 @@ async function startServer() {
   // API Route
   app.post("/api/generate", async (req, res) => {
     const { niche, tone, lang } = req.body;
-    const apiKey = process.env.GEMINI_API_KEY;
+    let apiKey = process.env.GEMINI_API_KEY;
 
-    if (!apiKey) {
-      return res.status(500).json({ error: "GEMINI_API_KEY is not configured" });
+    // تنظيف المفتاح من المسافات أو علامات التنصيص الزائدة
+    if (apiKey) {
+      apiKey = apiKey.replace(/['"]+/g, '').trim();
+    }
+
+    if (!apiKey || apiKey === "MY_GEMINI_API_KEY" || apiKey === "") {
+      return res.status(500).json({ 
+        error: "مفتاح الـ API غير مضبوط بشكل صحيح. يرجى التأكد من إضافة GEMINI_API_KEY في إعدادات Secrets." 
+      });
     }
 
     try {

@@ -21,9 +21,17 @@ export default async function handler(req, res) {
   }
 
   try {
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) {
-      return res.status(500).json({ error: 'GEMINI_API_KEY is not configured in Vercel settings' });
+    let apiKey = process.env.GEMINI_API_KEY;
+    
+    // تنظيف المفتاح من المسافات أو علامات التنصيص الزائدة
+    if (apiKey) {
+      apiKey = apiKey.replace(/['"]+/g, '').trim();
+    }
+
+    if (!apiKey || apiKey === "MY_GEMINI_API_KEY" || apiKey === "") {
+      return res.status(500).json({ 
+        error: 'مفتاح الـ API غير مضبوط بشكل صحيح. يرجى التأكد من إضافة GEMINI_API_KEY في إعدادات Vercel أو Secrets.' 
+      });
     }
 
     const ai = new GoogleGenAI({ apiKey });
