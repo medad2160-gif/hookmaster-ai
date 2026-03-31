@@ -72,6 +72,16 @@ export default async function handler(req, res) {
     return res.status(200).json(result);
   } catch (error) {
     console.error("Error in generateViralContent:", error);
-    return res.status(500).json({ error: 'Failed to generate content: ' + error.message });
+    
+    let errorMessage = 'فشل في إنشاء المحتوى، يرجى المحاولة مرة أخرى.';
+    const errorStr = error.message || '';
+    
+    if (errorStr.includes('429') || errorStr.includes('quota') || errorStr.includes('RESOURCE_EXHAUSTED')) {
+      errorMessage = 'لقد وصلت إلى الحد الأقصى المسموح به لليوم (Quota Exceeded). يرجى الانتظار قليلاً أو المحاولة غداً، أو استخدام مفتاح API مدفوع.';
+    } else if (errorStr.includes('API key not valid')) {
+      errorMessage = 'مفتاح الـ API غير صحيح، يرجى التأكد من إعداده في Secrets أو Vercel.';
+    }
+
+    return res.status(500).json({ error: errorMessage });
   }
 }

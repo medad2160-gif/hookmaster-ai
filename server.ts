@@ -51,7 +51,14 @@ async function startServer() {
       res.json(result);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Failed to generate content" });
+      let errorMessage = "فشل في إنشاء المحتوى";
+      const errorStr = (error as Error).message || "";
+      
+      if (errorStr.includes('429') || errorStr.includes('quota') || errorStr.includes('RESOURCE_EXHAUSTED')) {
+        errorMessage = "لقد وصلت إلى الحد الأقصى المسموح به لليوم. يرجى المحاولة لاحقاً.";
+      }
+      
+      res.status(500).json({ error: errorMessage });
     }
   });
 
