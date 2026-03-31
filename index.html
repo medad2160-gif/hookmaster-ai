@@ -1,13 +1,225 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Google AI Studio App</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ViralHook AI | مولد الخطافات الفايرل</title>
+    
+    <!-- Scripts & Styles -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Space+Grotesk:wght@500;700&family=Noto+Sans+Arabic:wght@400;700&display=swap" rel="stylesheet">
 
+    <style>
+        body {
+            background-color: #09090b;
+            color: #f4f4f5;
+            font-family: 'Noto Sans Arabic', 'Inter', sans-serif;
+        }
+        .font-display { font-family: 'Space Grotesk', sans-serif; }
+        .gradient-text {
+            background: linear-gradient(to right, #10b981, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .brutalist-card {
+            background: #18181b;
+            border: 1px solid #27272a;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        .brutalist-input {
+            background: #09090b;
+            border: 1px solid #27272a;
+            border-radius: 0.75rem;
+            padding: 0.75rem 1rem;
+            width: 100%;
+            outline: none;
+            transition: all 0.2s;
+        }
+        .brutalist-input:focus { border-color: #10b981; box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2); }
+        .brutalist-button {
+            background: #10b981;
+            color: #09090b;
+            font-weight: 700;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+            width: 100%;
+        }
+        .brutalist-button:hover { background: #34d399; transform: translateY(-1px); }
+        .brutalist-button:active { transform: translateY(0); }
+        .brutalist-button:disabled { opacity: 0.5; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const App = () => {
+            const [niche, setNiche] = useState('');
+            const [tone, setTone] = useState('educational');
+            const [loading, setLoading] = useState(false);
+            const [result, setResult] = useState(null);
+            const [error, setError] = useState(null);
+            const [copied, setCopied] = useState(null);
+
+            const tones = [
+                { value: 'educational', label: 'تعليمي', icon: '🎓' },
+                { value: 'controversial', label: 'مثير للجدل', icon: '🔥' },
+                { value: 'storytelling', label: 'قصصي', icon: '📖' },
+                { value: 'humorous', label: 'فكاهي', icon: '😂' },
+                { value: 'inspirational', label: 'ملهم', icon: '✨' },
+            ];
+
+            const handleGenerate = async (e) => {
+                e.preventDefault();
+                if (!niche.trim()) return;
+
+                setLoading(true);
+                setError(null);
+                setResult(null);
+
+                try {
+                    const response = await fetch('/api/generate', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ niche, tone, lang: 'ar' }),
+                    });
+
+                    const data = await response.json();
+                    if (!response.ok) throw new Error(data.error || 'فشل في الاتصال بالخادم');
+                    
+                    setResult(data);
+                } catch (err) {
+                    setError(err.message);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            const copyToClipboard = (text, id) => {
+                navigator.clipboard.writeText(text);
+                setCopied(id);
+                setTimeout(() => setCopied(null), 2000);
+            };
+
+            return (
+                <div className="min-h-screen p-4 md:p-8 max-w-4xl mx-auto">
+                    <header className="mb-12 text-center">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm font-medium mb-4">
+                            <span>✨ استراتيجية الانتشار بالذكاء الاصطناعي</span>
+                        </div>
+                        <h1 className="text-4xl md:text-6xl font-bold font-display tracking-tight mb-4">
+                            فايرل <span className="gradient-text">هوك</span> AI
+                        </h1>
+                        <p className="text-zinc-400 text-lg max-w-xl mx-auto">
+                            أوقف التمرير وضاعف وصولك. قم بإنشاء خطافات وأفكار ونصوص عالية التحويل في ثوانٍ.
+                        </p>
+                    </header>
+
+                    <main className="grid gap-8">
+                        <section className="brutalist-card">
+                            <form onSubmit={handleGenerate} className="space-y-6">
+                                <div className="space-y-2">
+                                    <label className="text-sm font-semibold text-zinc-400 uppercase tracking-wider">مجالك أو موضوعك</label>
+                                    <input 
+                                        type="text" 
+                                        value={niche}
+                                        onChange={(e) => setNiche(e.target.value)}
+                                        placeholder="مثال: ديكور المنزل، تداول، طبخ..."
+                                        className="brutalist-input"
+                                        required
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-sm font-semibold text-zinc-400 uppercase tracking-wider">اختر الأسلوب</label>
+                                    <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                                        {tones.map((t) => (
+                                            <button
+                                                key={t.value}
+                                                type="button"
+                                                onClick={() => setTone(t.value)}
+                                                className={`flex flex-col items-center p-3 rounded-xl border transition-all ${
+                                                    tone === t.value ? 'bg-emerald-500/10 border-emerald-500 text-emerald-400' : 'bg-zinc-950 border-zinc-800 text-zinc-500'
+                                                }`}
+                                            >
+                                                <span className="text-2xl mb-1">{t.icon}</span>
+                                                <span className="text-xs font-medium">{t.label}</span>
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <button type="submit" disabled={loading} className="brutalist-button">
+                                    {loading ? 'جاري التحليل...' : 'إنشاء استراتيجية الانتشار'}
+                                </button>
+                            </form>
+                        </section>
+
+                        {error && (
+                            <div className="p-4 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl text-center">
+                                {error}
+                            </div>
+                        )}
+
+                        {result && (
+                            <div className="space-y-6">
+                                <div className="brutalist-card border-l-4 border-l-emerald-500">
+                                    <div className="flex justify-between mb-2">
+                                        <span className="text-emerald-400 text-xs font-bold uppercase">الخطاف (Hook)</span>
+                                        <button onClick={() => copyToClipboard(result.hook, 'hook')} className="text-zinc-500 hover:text-white">
+                                            {copied === 'hook' ? '✅' : '📋'}
+                                        </button>
+                                    </div>
+                                    <p className="text-xl font-bold">"{result.hook}"</p>
+                                </div>
+
+                                <div className="brutalist-card border-l-4 border-l-cyan-500">
+                                    <div className="flex justify-between mb-2">
+                                        <span className="text-cyan-400 text-xs font-bold uppercase">الفكرة المرئية</span>
+                                        <button onClick={() => copyToClipboard(result.videoIdea, 'idea')} className="text-zinc-500 hover:text-white">
+                                            {copied === 'idea' ? '✅' : '📋'}
+                                        </button>
+                                    </div>
+                                    <p className="text-zinc-300">{result.videoIdea}</p>
+                                </div>
+
+                                <div className="brutalist-card border-l-4 border-l-violet-500">
+                                    <div className="flex justify-between mb-2">
+                                        <span className="text-violet-400 text-xs font-bold uppercase">النص (Script)</span>
+                                        <button onClick={() => copyToClipboard(result.script, 'script')} className="text-zinc-500 hover:text-white">
+                                            {copied === 'script' ? '✅' : '📋'}
+                                        </button>
+                                    </div>
+                                    <div className="bg-black/30 p-4 rounded-lg text-sm text-zinc-300 whitespace-pre-wrap">
+                                        {result.script}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </main>
+
+                    <footer className="mt-20 pb-8 text-center text-zinc-600 text-sm">
+                        © 2026 ViralHook AI. صُمم للمبدعين الجادين.
+                    </footer>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
