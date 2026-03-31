@@ -118,28 +118,28 @@
             };
 
             return (
-                <div className="container" dir="ltr">
+                <div className="container" dir="rtl">
                     <header className="header">
                         <div className="badge">
-                            <span>✨</span> AI-Powered Viral Strategy
+                            <span>✨</span> استراتيجية انتشار مدعومة بالذكاء الاصطناعي
                         </div>
                         <h1 className="title">Viral<span>Hook</span> AI</h1>
                         <p className="subtitle">
-                            Stop the scroll and explode your reach. Generate high-converting hooks, ideas, and scripts in seconds.
+                            أوقف التمرير وضاعف وصولك. أنشئ خطافات، أفكار، وسيناريوهات عالية التحويل في ثوانٍ.
                         </p>
                     </header>
 
                     <div className="input-group">
-                        <label className="input-label">Your Niche or Topic</label>
+                        <label className="input-label">مجالك أو موضوعك</label>
                         <input 
                             className="text-input"
                             value={niche}
                             onChange={(e) => setNiche(e.target.value)}
-                            placeholder="e.g. Minimalist Home Decor, Crypto T"
+                            placeholder="مثال: ديكور منزلي بسيط، تجارة العملات..."
                         />
                     </div>
 
-                    <h3 className="input-label" style={{marginBottom: '15px'}}>Choose Your Tone</h3>
+                    <h3 className="input-label" style={{marginBottom: '15px'}}>اختر نبرة الصوت</h3>
                     
                     <div className="style-grid">
                         {styles.map(s => (
@@ -150,7 +150,12 @@
                                 style={s.id === 'inspiring' ? {gridColumn: 'span 2'} : {}}
                             >
                                 <span className="style-icon">{s.icon}</span>
-                                <span className="style-name">{s.name}</span>
+                                <span className="style-name">{
+                                    s.id === 'educational' ? 'تعليمي' :
+                                    s.id === 'controversial' ? 'مثير للجدل' :
+                                    s.id === 'storytelling' ? 'قصصي' :
+                                    s.id === 'humorous' ? 'فكاهي' : 'ملهم'
+                                }</span>
                             </div>
                         ))}
                     </div>
@@ -160,9 +165,9 @@
                         disabled={loading}
                         className="generate-btn"
                     >
-                        {loading ? 'Generating...' : (
+                        {loading ? 'جاري الإنشاء...' : (
                             <>
-                                <span>⚡</span> Generate Viral Strategy
+                                <span>⚡</span> إنشاء استراتيجية الانتشار
                             </>
                         )}
                     </button>
@@ -176,22 +181,22 @@
                     {result && (
                         <div className="results" style={{marginTop: '40px'}}>
                             <div className="result-card">
-                                <div className="result-label">Hook</div>
+                                <div className="result-label">الخطاف (Hook)</div>
                                 <p style={{fontSize: '18px', fontWeight: 'bold'}}>{result.hook}</p>
                             </div>
                             <div className="result-card" style={{borderColor: '#3498db'}}>
-                                <div className="result-label" style={{color: '#3498db'}}>Video Idea</div>
+                                <div className="result-label" style={{color: '#3498db'}}>فكرة الفيديو</div>
                                 <p>{result.videoIdea}</p>
                             </div>
                             <div className="result-card" style={{borderColor: '#9b59b6'}}>
-                                <div className="result-label" style={{color: '#9b59b6'}}>Script</div>
+                                <div className="result-label" style={{color: '#9b59b6'}}>السيناريو (Script)</div>
                                 <p style={{whiteSpace: 'pre-wrap'}}>{result.script}</p>
                             </div>
                         </div>
                     )}
 
                     <footer>
-                        © 2026 ViralHook AI. Designed for serious creators.
+                        © 2026 ViralHook AI. صمم للمبدعين الجادين.
                     </footer>
                 </div>
             );
