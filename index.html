@@ -13,28 +13,43 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
     <style>
-        body { background-color: #0d0d0d; color: #ffffff; font-family: 'Noto Sans Arabic', sans-serif; }
-        .container { max-width: 450px; margin: 0 auto; padding: 20px; }
-        .input-group { background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 15px; margin-bottom: 20px; }
-        .input-label { color: #888; font-size: 14px; margin-bottom: 10px; display: block; }
-        .text-input { background: transparent; border: none; color: white; width: 100%; outline: none; font-size: 18px; }
+        body { background-color: #0d0d0d; color: #ffffff; font-family: 'Space Grotesk', 'Noto Sans Arabic', sans-serif; }
+        .container { max-width: 450px; margin: 0 auto; padding: 40px 20px; }
         
-        .style-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
-        .style-card { 
-            background: #1a1a1a; border: 2px solid transparent; border-radius: 12px; 
-            padding: 20px; text-align: center; cursor: pointer; transition: 0.2s;
+        /* Header Styles */
+        .header { text-align: center; margin-bottom: 40px; }
+        .badge { 
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(46, 204, 113, 0.1); border: 1px solid rgba(46, 204, 113, 0.3);
+            color: #2ecc71; padding: 6px 16px; border-radius: 999px; font-size: 13px; font-weight: 500;
+            margin-bottom: 20px;
         }
-        .style-card.active { border-color: #2ecc71; background: #1a1a1a; }
-        .style-card:hover { background: #262626; }
-        .style-icon { font-size: 24px; margin-bottom: 8px; display: block; }
-        .style-name { font-size: 14px; color: #ccc; }
-        .style-card.active .style-name { color: #2ecc71; }
+        .title { font-size: 48px; font-weight: 700; margin-bottom: 16px; letter-spacing: -1px; }
+        .title span { color: #34d399; }
+        .subtitle { color: #a1a1aa; font-size: 16px; line-height: 1.5; max-width: 380px; margin: 0 auto; }
+
+        .input-group { background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 15px; margin-bottom: 24px; }
+        .input-label { color: #71717a; font-size: 12px; font-weight: 600; margin-bottom: 12px; display: block; text-transform: uppercase; letter-spacing: 0.05em; }
+        .text-input { background: transparent; border: none; color: white; width: 100%; outline: none; font-size: 16px; }
+        .text-input::placeholder { color: #52525b; }
+        
+        .style-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+        .style-card { 
+            background: #1a1a1a; border: 1px solid #27272a; border-radius: 12px; 
+            padding: 24px 16px; text-align: center; cursor: pointer; transition: all 0.2s;
+        }
+        .style-card.active { border-color: #10b981; background: rgba(16, 185, 129, 0.05); }
+        .style-card:hover { background: #27272a; }
+        .style-icon { font-size: 24px; margin-bottom: 12px; display: block; }
+        .style-name { font-size: 13px; color: #a1a1aa; font-weight: 500; }
+        .style-card.active .style-name { color: #10b981; }
 
         .generate-btn { 
-            background: #2ecc71; color: #000; font-weight: bold; width: 100%; 
-            padding: 15px; border-radius: 12px; font-size: 18px; transition: 0.2s;
+            background: #10b981; color: #000; font-weight: 700; width: 100%; 
+            padding: 16px; border-radius: 12px; font-size: 16px; transition: 0.2s;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
         }
-        .generate-btn:hover { background: #27ae60; transform: scale(0.98); }
+        .generate-btn:hover { background: #059669; transform: translateY(-1px); }
         .generate-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
         .error-box { 
@@ -42,10 +57,10 @@
             padding: 15px; border-radius: 12px; margin-top: 20px; text-align: center; font-size: 14px;
         }
         
-        .result-card { background: #1a1a1a; border-radius: 12px; padding: 20px; margin-top: 20px; border-right: 4px solid #2ecc71; }
-        .result-label { color: #2ecc71; font-size: 12px; font-weight: bold; margin-bottom: 8px; text-transform: uppercase; }
+        .result-card { background: #1a1a1a; border-radius: 12px; padding: 20px; margin-top: 20px; border-left: 4px solid #10b981; }
+        .result-label { color: #10b981; font-size: 11px; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
         
-        footer { text-align: center; color: #555; font-size: 12px; margin-top: 40px; }
+        footer { text-align: center; color: #52525b; font-size: 12px; margin-top: 60px; }
     </style>
 </head>
 <body>
@@ -62,17 +77,17 @@
             const [error, setError] = useState(null);
 
             const styles = [
-                { id: 'controversial', name: 'مثير للجدل', icon: '🔥' },
-                { id: 'educational', name: 'تعليمي', icon: '🎓' },
-                { id: 'humorous', name: 'فكاهي', icon: '😂' },
-                { id: 'storytelling', name: 'قصصي', icon: '📖' },
-                { id: 'inspiring', name: 'ملهم', icon: '✨' }
+                { id: 'educational', name: 'Educational', icon: '🎓' },
+                { id: 'controversial', name: 'Controversial', icon: '🔥' },
+                { id: 'storytelling', name: 'Storytelling', icon: '📖' },
+                { id: 'humorous', name: 'Humorous', icon: '😂' },
+                { id: 'inspiring', name: 'Inspirational', icon: '✨' }
             ];
 
             const handleGenerate = async (e) => {
                 if (e) e.preventDefault();
                 if (!niche.trim()) {
-                    setError('الرجاء إدخال المجال أولاً');
+                    setError('Please enter a niche or topic first');
                     return;
                 }
 
@@ -89,11 +104,11 @@
 
                     const contentType = response.headers.get("content-type");
                     if (!contentType || !contentType.includes("application/json")) {
-                        throw new Error('Unexpected token \'T\', "The page c"... is not valid JSON');
+                        throw new Error('Server error: Invalid response format');
                     }
 
                     const data = await response.json();
-                    if (!response.ok) throw new Error(data.error || 'فشل في جلب البيانات');
+                    if (!response.ok) throw new Error(data.error || 'Failed to generate strategy');
                     setResult(data);
                 } catch (err) {
                     setError(err.message);
@@ -103,18 +118,28 @@
             };
 
             return (
-                <div className="container">
+                <div className="container" dir="ltr">
+                    <header className="header">
+                        <div className="badge">
+                            <span>✨</span> AI-Powered Viral Strategy
+                        </div>
+                        <h1 className="title">Viral<span>Hook</span> AI</h1>
+                        <p className="subtitle">
+                            Stop the scroll and explode your reach. Generate high-converting hooks, ideas, and scripts in seconds.
+                        </p>
+                    </header>
+
                     <div className="input-group">
-                        <label className="input-label">منتجات</label>
+                        <label className="input-label">Your Niche or Topic</label>
                         <input 
                             className="text-input"
                             value={niche}
                             onChange={(e) => setNiche(e.target.value)}
-                            placeholder="اكتب مجالك هنا..."
+                            placeholder="e.g. Minimalist Home Decor, Crypto T"
                         />
                     </div>
 
-                    <h3 className="input-label" style={{textAlign: 'right', marginBottom: '15px'}}>اختر الأسلوب</h3>
+                    <h3 className="input-label" style={{marginBottom: '15px'}}>Choose Your Tone</h3>
                     
                     <div className="style-grid">
                         {styles.map(s => (
@@ -135,7 +160,11 @@
                         disabled={loading}
                         className="generate-btn"
                     >
-                        {loading ? 'جاري الإنشاء...' : 'إنشاء استراتيجية الانتشار'}
+                        {loading ? 'Generating...' : (
+                            <>
+                                <span>⚡</span> Generate Viral Strategy
+                            </>
+                        )}
                     </button>
 
                     {error && (
@@ -145,95 +174,25 @@
                     )}
 
                     {result && (
-                        <div className="results">
+                        <div className="results" style={{marginTop: '40px'}}>
                             <div className="result-card">
-                                <div className="result-label">الخطاف (Hook)</div>
+                                <div className="result-label">Hook</div>
                                 <p style={{fontSize: '18px', fontWeight: 'bold'}}>{result.hook}</p>
                             </div>
                             <div className="result-card" style={{borderColor: '#3498db'}}>
-                                <div className="result-label" style={{color: '#3498db'}}>الفكرة المرئية</div>
+                                <div className="result-label" style={{color: '#3498db'}}>Video Idea</div>
                                 <p>{result.videoIdea}</p>
                             </div>
                             <div className="result-card" style={{borderColor: '#9b59b6'}}>
-                                <div className="result-label" style={{color: '#9b59b6'}}>النص (Script)</div>
+                                <div className="result-label" style={{color: '#9b59b6'}}>Script</div>
                                 <p style={{whiteSpace: 'pre-wrap'}}>{result.script}</p>
                             </div>
                         </div>
                     )}
 
                     <footer>
-                        © 2026 ViralHook AI. صمم للمبدعين الجادين.
+                        © 2026 ViralHook AI. Designed for serious creators.
                     </footer>
-                </div>
-            );
-        };
-
-            return (
-                <div className="min-h-screen p-6 max-w-2xl mx-auto">
-                    <header className="text-center mb-10">
-                        <h1 className="text-5xl font-bold mb-4">فايرل <span className="gradient-text">هوك</span></h1>
-                        <p className="text-zinc-400">أداة ذكية لإنشاء محتوى يخطف الأنظار</p>
-                    </header>
-
-                    <div className="brutalist-card mb-8">
-                        <form onSubmit={handleGenerate} className="space-y-5">
-                            <div>
-                                <label className="block text-sm text-zinc-500 mb-2">ما هو مجالك؟</label>
-                                <input 
-                                    className="brutalist-input"
-                                    value={niche}
-                                    onChange={(e) => setNiche(e.target.value)}
-                                    placeholder="مثال: الطبخ، البرمجة، العقارات..."
-                                    required
-                                />
-                            </div>
-                            
-                            <div>
-                                <label className="block text-sm text-zinc-500 mb-2">أسلوب المحتوى</label>
-                                <select 
-                                    className="brutalist-input"
-                                    value={tone}
-                                    onChange={(e) => setTone(e.target.value)}
-                                >
-                                    <option value="educational">تعليمي</option>
-                                    <option value="controversial">مثير للجدل</option>
-                                    <option value="humorous">فكاهي</option>
-                                    <option value="storytelling">قصصي</option>
-                                </select>
-                            </div>
-
-                            <button 
-                                type="submit" 
-                                disabled={loading} 
-                                className="brutalist-button"
-                            >
-                                {loading ? 'جاري التحليل والإنشاء...' : 'إنشاء استراتيجية الانتشار'}
-                            </button>
-                        </form>
-                    </div>
-
-                    {error && (
-                        <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-xl text-red-400 text-center mb-6">
-                            {error}
-                        </div>
-                    )}
-
-                    {result && (
-                        <div className="space-y-6">
-                            <div className="brutalist-card border-r-4 border-r-emerald-500">
-                                <h3 className="text-emerald-400 font-bold text-xs uppercase mb-2">الخطاف (Hook)</h3>
-                                <p className="text-xl font-bold">"{result.hook}"</p>
-                            </div>
-                            <div className="brutalist-card border-r-4 border-r-cyan-500">
-                                <h3 className="text-cyan-400 font-bold text-xs uppercase mb-2">الفكرة المرئية</h3>
-                                <p className="text-zinc-300">{result.videoIdea}</p>
-                            </div>
-                            <div className="brutalist-card border-r-4 border-r-violet-500">
-                                <h3 className="text-violet-400 font-bold text-xs uppercase mb-2">النص (Script)</h3>
-                                <p className="text-zinc-300 text-sm leading-relaxed whitespace-pre-wrap">{result.script}</p>
-                            </div>
-                        </div>
-                    )}
                 </div>
             );
         };
