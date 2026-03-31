@@ -77,17 +77,21 @@
             const [error, setError] = useState(null);
 
             const styles = [
-                { id: 'educational', name: 'Educational', icon: '🎓' },
-                { id: 'controversial', name: 'Controversial', icon: '🔥' },
-                { id: 'storytelling', name: 'Storytelling', icon: '📖' },
-                { id: 'humorous', name: 'Humorous', icon: '😂' },
-                { id: 'inspiring', name: 'Inspirational', icon: '✨' }
+                { id: 'educational', name: 'تعليمي', icon: '🎓' },
+                { id: 'controversial', name: 'مثير للجدل', icon: '🔥' },
+                { id: 'storytelling', name: 'قصصي', icon: '📖' },
+                { id: 'humorous', name: 'فكاهي', icon: '😂' },
+                { id: 'inspiring', name: 'ملهم', icon: '✨' }
             ];
 
             const handleGenerate = async (e) => {
-                if (e) e.preventDefault();
+                if (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+                
                 if (!niche.trim()) {
-                    setError('Please enter a niche or topic first');
+                    setError('الرجاء إدخال المجال أو الموضوع أولاً');
                     return;
                 }
 
@@ -119,58 +123,57 @@
 
             return (
                 <div className="container" dir="rtl">
-                    <header className="header">
-                        <div className="badge">
-                            <span>✨</span> استراتيجية انتشار مدعومة بالذكاء الاصطناعي
-                        </div>
-                        <h1 className="title">Viral<span>Hook</span> AI</h1>
-                        <p className="subtitle">
-                            أوقف التمرير وضاعف وصولك. أنشئ خطافات، أفكار، وسيناريوهات عالية التحويل في ثوانٍ.
-                        </p>
-                    </header>
-
-                    <div className="input-group">
-                        <label className="input-label">مجالك أو موضوعك</label>
-                        <input 
-                            className="text-input"
-                            value={niche}
-                            onChange={(e) => setNiche(e.target.value)}
-                            placeholder="مثال: ديكور منزلي بسيط، تجارة العملات..."
-                        />
-                    </div>
-
-                    <h3 className="input-label" style={{marginBottom: '15px'}}>اختر نبرة الصوت</h3>
-                    
-                    <div className="style-grid">
-                        {styles.map(s => (
-                            <div 
-                                key={s.id}
-                                className={`style-card ${tone === s.id ? 'active' : ''}`}
-                                onClick={() => setTone(s.id)}
-                                style={s.id === 'inspiring' ? {gridColumn: 'span 2'} : {}}
-                            >
-                                <span className="style-icon">{s.icon}</span>
-                                <span className="style-name">{
-                                    s.id === 'educational' ? 'تعليمي' :
-                                    s.id === 'controversial' ? 'مثير للجدل' :
-                                    s.id === 'storytelling' ? 'قصصي' :
-                                    s.id === 'humorous' ? 'فكاهي' : 'ملهم'
-                                }</span>
+                    <form onSubmit={handleGenerate} action="#">
+                        <header className="header">
+                            <div className="badge">
+                                <span>✨</span> استراتيجية انتشار مدعومة بالذكاء الاصطناعي
                             </div>
-                        ))}
-                    </div>
+                            <h1 className="title">Viral<span>Hook</span> AI</h1>
+                            <p className="subtitle">
+                                أوقف التمرير وضاعف وصولك. أنشئ خطافات، أفكار، وسيناريوهات عالية التحويل في ثوانٍ.
+                            </p>
+                        </header>
 
-                    <button 
-                        onClick={handleGenerate}
-                        disabled={loading}
-                        className="generate-btn"
-                    >
-                        {loading ? 'جاري الإنشاء...' : (
-                            <>
-                                <span>⚡</span> إنشاء استراتيجية الانتشار
-                            </>
-                        )}
-                    </button>
+                        <div className="input-group">
+                            <label className="input-label">مجالك أو موضوعك</label>
+                            <input 
+                                className="text-input"
+                                value={niche}
+                                onChange={(e) => setNiche(e.target.value)}
+                                placeholder="مثال: ديكور منزلي بسيط، تجارة العملات..."
+                                required
+                            />
+                        </div>
+
+                        <h3 className="input-label" style={{marginBottom: '15px'}}>اختر نبرة الصوت</h3>
+                        
+                        <div className="style-grid">
+                            {styles.map(s => (
+                                <button 
+                                    type="button"
+                                    key={s.id}
+                                    className={`style-card ${tone === s.id ? 'active' : ''}`}
+                                    onClick={() => setTone(s.id)}
+                                    style={s.id === 'inspiring' ? {gridColumn: 'span 2'} : {}}
+                                >
+                                    <span className="style-icon">{s.icon}</span>
+                                    <span className="style-name">{s.name}</span>
+                                </button>
+                            ))}
+                        </div>
+
+                        <button 
+                            type="submit"
+                            disabled={loading}
+                            className="generate-btn"
+                        >
+                            {loading ? 'جاري الإنشاء...' : (
+                                <>
+                                    <span>⚡</span> إنشاء استراتيجية الانتشار
+                                </>
+                            )}
+                        </button>
+                    </form>
 
                     {error && (
                         <div className="error-box">
